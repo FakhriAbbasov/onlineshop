@@ -1,0 +1,47 @@
+{% extends 'core/base.html' %}
+
+{% block title %} Home {% endblock %}
+
+{% block content %}
+    <div class="pt-2 pb-6 grid grid-cols-4 gap-4 bg-gray-100">
+        <div class="col-span-3">
+            <div class="grid grid-cols-3 gap-3">
+                {% for item in items %}
+                <div class="mx-2">
+                    <a href="{% url 'item:detail' item.id %}">
+                        <div>
+                            <img src="{{ item.image.url }}" class="rounded-t-xl w-full h-40">
+                        </div>
+    
+                        <div class="p-2 bg-sky-100">
+                            <h2 class="text-2xl">{{ item.name }}</h2>
+                            <p class="text-slate-500">Price: {{ item.price }}</p>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="col-span-1">
+            <ul>
+                {% for category in categories %}
+                <li class="py-2 px-2 rounded-xl{% if category.id == category_id %} bg-gray-200{% endif %}">
+                    <a href="{% url 'core:items' %}?query={{ query }}&category={{ category.id }}" class="px-6 py-2 text-lg font-semibold bg-emerald-400 text-white rounded-xl hover:bg-emerald-700">{{ category.name }}</a>
+                </li>
+                {% endfor %}
+            </ul>
+    
+            <hr class="my-2">
+            <form method="get" action="{% url 'core:items' %}" class="mr-1">
+                <input name="query" class="py-4 px-5 w-full border rounded-xl" type="text" value="{{ query }}"
+                    placeholder="Search for an item">
+    
+                <div class="flex mt-2 justify-center">
+                    <button class="py-3 px-8 text-lg bg-sky-500 text-white rounded-xl">Search</button>
+                    <a href="{% url 'core:items' %}"
+                        class="ml-4 py-4 px-8 inline-block bg-emerald-400 text-lg rounded-xl text-white">Clear Filters</a>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

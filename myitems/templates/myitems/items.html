@@ -1,0 +1,24 @@
+{% extends 'core/base.html' %}
+
+{% block title %}My Items{% endblock %}
+
+{% block content %}
+<h2 class="mt-10 mb-12 text-4xl text-center">My items</h2>
+
+<div class="grid grid-cols-3">
+    {% for item in items %}
+    <div class="mx-2">
+        <a href="{% url 'item:detail' item.id %}">
+            <div>
+                <img src="{{ item.image.url }}" class="rounded-t-xl w-full h-40">
+            </div>
+    
+            <div class="p-2 bg-sky-100">
+                <h2 class="text-2xl">{{ item.name }}</h2>
+                <p class="text-slate-500">Price: {{ item.price }}</p>
+            </div>
+        </a>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

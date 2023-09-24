@@ -1,0 +1,23 @@
+{% extends 'core/base.html' %}
+
+{% block title %}My Basket{% endblock %}
+
+{% block content %}
+<h2 class="mb-12 mt-5 text-2xl text-center">Items in My Basket</h2>
+
+<div class="grid grid-cols-3 gap-2">
+    {% for basket_item in basket_items %}
+    <div>
+        <a href="{% url 'item:detail' basket_item.item.id %}">
+            <div>
+                <img src="{{ basket_item.item.image.url }}" class="rounded-t-xl w-full h-40">
+            </div>
+            <div class="p-2 bg-sky-100">
+                <h2 class="text-2xl">{{ basket_item.item.name }}</h2>
+                <p class="text-gray-500">Price: {{ basket_item.item.price }}</p>
+            </div>
+        </a>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

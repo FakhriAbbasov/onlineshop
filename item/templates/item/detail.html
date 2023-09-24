@@ -1,0 +1,68 @@
+{% extends 'core/base.html' %}
+
+{% block title %}{{ item.name }}{% endblock %}
+
+{% block content %}
+<div class="grid grid-cols-5 gap-6">
+    <div class="col-span-3">
+        <img src="{{ item.image.url }}">
+    </div>
+
+    <div class="col-span-2 m-5 rounded-xl">
+        <h1 class="mb-6 text-3xl">{{ item.name }}</h1>
+        <p><strong>Price: </strong>{{ item.price }}</p>
+        <p><strong>Seller: </strong>{{ item.created_by.username }}</p>
+
+        {% if item.description %}
+            <strong>Description:</strong>
+            {{ item.description }}
+        {% endif %}
+
+        {% if request.user == item.created_by %}
+        <div>
+            <a href="{% url 'item:edit' item.id %}"
+                class="inline-block mt-5 px-7 py-3 text-lg font-semibold bg-emerald-500 text-white rounded-xl hover:bg-emerald-700">Edit</a>
+            <a href="{% url 'item:delete' item.id %}"
+                class="inline-block mt-5 px-5 py-3 text-lg font-semibold bg-red-500 text-white rounded-xl hover:bg-red-700">Delete</a>
+        </div>
+        {% else %}
+        {% if not request.user.is_authenticated or item not in request.user.basket.items.all %}
+            <div>
+                <a href="{% url 'item:add_to_basket' item.id %}"
+                    class="inline-block mt-5 px-6 py-3 text-lg font-semibold bg-emerald-500 text-white rounded-xl hover:bg-emerald-700">
+                    Add to Basket
+                </a>
+            </div>
+        {% else %}
+        <div>
+            <a href="{% url 'item:remove_from_basket' item.id %}"
+                class="inline-block mt-5 px-6 py-3 text-lg font-semibold bg-red-500 text-white rounded-xl hover:bg-red-700">
+                Remove from Basket
+            </a>
+        </div>
+        {% endif %}
+        {% endif %}
+    </div>
+</div>
+
+<div class="mt-6 px-6 py-12 bg-gray-100 rounded-xl">
+    <h2 class="mb-12 text-2xl text-center">Related items</h2>
+
+    <div class="grid grid-cols-3 gap-3">
+        {% for related in related_items %}
+        <div>
+            <a href="{% url 'item:detail' related.id %}">
+                <div>
+                    <img src="{{ related.image.url }}" class = "rounded-t-xl w-full h-40"> 
+                </div>
+
+                <div class="p-6 bg-sky-100 rounded-b-xl">
+                    <h2 class="text-2xl">{{ related.name }}</h2>
+                    <p class="text-gray-500">Price: {{ related.price }}</p>
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
